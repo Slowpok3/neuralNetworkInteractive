@@ -25,12 +25,12 @@ const button1 = inputButton.addEventListener('click', function (){
     layers = document.getElementById("layerInput").value;
     
     const bigLabel = document.createElement("label");
-    bigLabel.innerText = "Nodes in Each Layer: ";
+    bigLabel.innerText = "Number of Nodes in Each Layer: ";
 
     const nodeButton = document.createElement("button");
     nodeButton.type = "submit";
     nodeButton.setAttribute("id", "nodeButton");
-    nodeButton.innerText = "Confirm Number of Nodes in Each Layer";
+    nodeButton.innerText = "Draw!";
 
     parent.appendChild(bigLabel);
     parent.appendChild(nodeButton);
@@ -38,7 +38,7 @@ const button1 = inputButton.addEventListener('click', function (){
 
     for(i = 1; i<=layers; i++){
         const x = document.createElement("label");
-        x.innerText = "Layer " + i + ":";
+        x.innerText = " Layer " + i + ":";
         parent.appendChild(x);
 
         const y = document.createElement("input");
@@ -66,7 +66,7 @@ const button1 = inputButton.addEventListener('click', function (){
         }
         console.log(nodes);
 
-        const weightsDisplay = document.createElement('h1');
+        const weightsDisplay = document.createElement('label');
         var weight = 1;
         for (i = 0; i<nodes.length; i++){
             weight*= nodes[i];
@@ -92,8 +92,8 @@ function startSketch(){
     
 
     var sketch = function (p){
-        var canvasHeight = 1000;
-        var canvasWidth = 1000;
+        var canvasHeight = 500;
+        var canvasWidth = 500;
 
         var cLayers = layers;
         var cNodes = nodes;
@@ -110,10 +110,12 @@ function startSketch(){
             circleRadius = x-gap;
         }
 
+        circleRadius /= 2;
+
 
         p.setup = function(){
             p.createCanvas(canvasWidth,canvasHeight);
-            p.background(220);
+            
             p.noLoop();
         };
         p.draw = function(){
@@ -124,6 +126,10 @@ function startSketch(){
                 var y = canvasHeight/cNodes[i];
                 var layer = [];
                 for(yCoord = y/2; yCoord < canvasHeight; yCoord+= y){
+                    let c = p.color(60, 171, 209);
+                    p.fill(c);
+                    p.stroke(0);
+                    p.strokeWeight(2);                   
                     p.ellipse(xCoord,yCoord,circleRadius,circleRadius);
                     const node = [xCoord, yCoord];
 
@@ -140,7 +146,9 @@ function startSketch(){
                     for (n2 = 0; n2<network[l+1].length; n2++){
                         var fCoordX = network[l+1][n2][0];
                         var fCoordY = network[l+1][n2][1];
-                        p.line(iCoordX,iCoordY,fCoordX,fCoordY);
+                        p.stroke(0);
+                        p.strokeWeight(2);
+                        p.line(iCoordX + (circleRadius/2) ,iCoordY,fCoordX-circleRadius/2,fCoordY);
                     }
                     
                 }
@@ -157,23 +165,6 @@ function startSketch(){
 
 }
 
-
-// function setup() {
-//     const myCanvas = createCanvas(1000, 1000);
-//     myCanvas.parent("content");
-//     background(220);
-//     inputButton.onclick = clear();
-// }
-  
-// function draw() {
-    
-//     if (mouseIsPressed) {
-//       fill(0);
-//     } else {
-//       fill(255);
-//     }
-//     ellipse(mouseX, mouseY, 80, 80);
-// }
 
 
 
